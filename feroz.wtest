@@ -1,0 +1,86 @@
+import feroz.feroz
+import caperucita.canasta
+import caperucita.caperucita
+import caperucita.abuelita
+import caperucita.bosque
+import caperucita.casaAbuelita
+import caperucita.cazador
+
+test "feroz pesa 10 al inicio y no esta saludable" {
+    feroz.crisis()
+    assert.equals(10, feroz.peso())
+    assert.notThat(feroz.esSaludable())
+}
+
+test "feroz esta saludable cuando pesa entre 20 y 150" {
+    feroz.crisis()
+    feroz.cambiarPeso(110)
+    assert.that(feroz.esSaludable())
+}
+
+test "feroz puede aumentar su peso" {
+    feroz.crisis()
+    feroz.cambiarPeso(20)
+    assert.equals(30, feroz.peso())
+}
+
+test "feroz puede disminuir su peso" {
+    feroz.crisis()
+    feroz.cambiarPeso(-3)
+    assert.equals(7, feroz.peso())
+}
+
+test "tras una crisis feroz vuelve a pesar 10" {
+    feroz.cambiarPeso(200)
+    feroz.crisis()
+    assert.equals(10, feroz.peso())
+}
+
+test "feroz come algo y aumenta el 10 porciento del peso ingerido" {
+    feroz.crisis()
+    feroz.comer(abuelita)
+    assert.equals(15, feroz.peso())
+}
+
+test "feroz corre hasta un lugar y baja 1 de peso" {
+    feroz.crisis()
+    feroz.correrHasta(bosque)
+    assert.equals(9, feroz.peso())
+}
+
+test "caperucita pesa 60 mas lo que lleva en la canasta" {
+    canasta.reiniciar()
+    assert.equals(61.2, caperucita.peso())
+}
+
+test "al cruzar el bosque caperucita pierde una manzana" {
+    canasta.reiniciar()
+    caperucita.cruzarBosque()
+    assert.equals(5, canasta.cantidadManzanas())
+}
+
+test "feroz queda saludable despues de comerse a todos" {
+    feroz.crisis()
+    canasta.reiniciar()
+    feroz.correrHasta(bosque)
+    feroz.correrHasta(casaAbuelita)
+    feroz.comer(abuelita)
+    caperucita.cruzarBosque()
+    feroz.comer(caperucita)
+    assert.notThat(feroz.esSaludable())
+    feroz.comer(cazador)
+    assert.that(feroz.esSaludable())
+}
+
+test "feroz no esta saludable si el cazador lo abre" {
+    feroz.crisis()
+    canasta.reiniciar()
+    feroz.correrHasta(bosque)
+    feroz.correrHasta(casaAbuelita)
+    feroz.comer(abuelita)
+    caperucita.cruzarBosque()
+    feroz.comer(caperucita)
+    cazador.provocarCrisis(feroz)
+    assert.equals(10, feroz.peso())
+    assert.notThat(feroz.esSaludable())
+}
